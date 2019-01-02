@@ -1,0 +1,24 @@
+# Sorces
+src/**/**
+src/
+
+# Arquivo de environment produção
+*.env
+
+# Nginx
+nginx/log/*.log
+
+# Logs
+logs
+*.log
+npm-debug.log*
+
+# Banco de dados
+postgres/data/**
+
+### VisualStudioCode ###
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json

@@ -1,0 +1,56 @@
+version: "3.2"
+services:
+  proxy:
+    container_name: proxy
+    image: nginx:1.13.8
+    restart: always
+    ports:
+        - "80:80"
+    volumes:
+        - type: bind
+          source: ./nginx/servico/default.conf
+          target: /etc/nginx/conf.d/default.conf
+        - type: bind
+          source: ./nginx/nginx.conf
+          target: /etc/nginx/nginx.conf
+        - type: bind
+          source: ./nginx/servico/log
+          target: /var/log/nginx
+    networks:
+        - miamono
+    env_file:
+        - .server.env
+    command: /bin/bash -c "exec nginx -g 'daemon off;'"
+  api:
+    container_name: api
+    build: ./src
+    restart: always
+    networks:
+        - miamono
+    volumes:
+        - type: volume
+          source: ./logs
+          target: /usr/src/app/logs
+    env_file:
+        - .app.env
+  database:
+    container_name: database
+    image: nogsantos/postgres
+    restart: always
+    ports:
+        - "5432:5432"
+    networks:
+        - miamono
+    volumes:
+        - type: bind
+          source: ./postgres/scripts
+          target: /scripts
+        - type: bind
+          source: ./postgres/data
+          target: /var/lib/postgresql
+    env_file:
+        - .db.env
+volumes:
+  logs: {}
+networks:
+    miamono: {}
